@@ -1,43 +1,50 @@
 import argparse
 import csv
-from glob import glob
 import re
 import statistics
 import sys
 
-def get_stats_from(files_names, files_content):
-    for i in range(len(files_content)):
-        file_name = files_names[i]
-        file_content = files_content[i]
-        print("FILE : {0}".format(files_names[i]))
-        print("\t*MEAN : {0}".format(statistics.mean(file_content)))
-        print("\t*MEDIAN : {0}".format(statistics.median(file_content)))
-        try:
-            print("\t*MOST TYPICAL VALUE : {0}".format(statistics.mode(file_content)))
-        except:
-            print("2 most typical values!")
-        print("\t*STANDARD DEVIATION : {0}".format(statistics.stdev(file_content)))
-        print("\t*VARIANCE : {0}".format(statistics.variance(file_content)))
+from glob import glob
 
-def get_global_stats(files_content):
+def get_stats_from(files_names, files_content, only_mean):
+    for i in range(len(files_content)):
+        file_content = files_content[i]
+        if not only_mean:
+            file_name = files_names[i]
+            print("FILE : {0}".format(files_names[i]))
+            print("\t*MEAN : {0}".format(statistics.mean(file_content)))
+            print("\t*MEDIAN : {0}".format(statistics.median(file_content)))
+            try:
+                print("\t*MOST TYPICAL VALUE : {0}".format(statistics.mode(file_content)))
+            except:
+                print("2 most typical values!")
+            print("\t*STANDARD DEVIATION : {0}".format(statistics.stdev(file_content)))
+            print("\t*VARIANCE : {0}".format(statistics.variance(file_content)))
+        else:
+            print("{0}".format(statistics.mean(file_content)))
+
+def get_global_stats(files_content, only_mean):
     data = []
     for sublist in files_content:
         data = data + sublist
-    print("*GLOBAL MEAN : {0}".format(statistics.mean(data)))
-    print("*GLOBAL MEDIAN : {0}".format(statistics.median(data)))
-    try:
-        print("*GLOBAL MOST TYPICAL VALUE : {0}".format(statistics.mode(data)))
-    except:
-        print("2 most typical values!")
-    print("*GLOBAL STANDARD DEVIATION : {0}".format(statistics.stdev(data)))
-    print("*GLOBAL VARIANCE : {0}".format(statistics.variance(data)))
+    if not only_mean:
+        print("*GLOBAL MEAN : {0}".format(statistics.mean(data)))
+        print("*GLOBAL MEDIAN : {0}".format(statistics.median(data)))
+        try:
+            print("*GLOBAL MOST TYPICAL VALUE : {0}".format(statistics.mode(data)))
+        except:
+            print("2 most typical values!")
+        print("*GLOBAL STANDARD DEVIATION : {0}".format(statistics.stdev(data)))
+        print("*GLOBAL VARIANCE : {0}".format(statistics.variance(data)))
+    else:
+        print("{0}".format(statistics.mean(data)))
 
 def main():
     parser = argparse.ArgumentParser(description='Get stats from Powertool output')
     parser.add_argument('-p', '--path', type=str, default=None, required=True,
                         help="specify path to your directories")
-    parser.add_argument('-o', '--output', action="store_true",
-                        help="save the output in the analysed directory")
+    parser.add_argument('-m', '--mean', action="store_true", default=False,
+                        help="Only compute the mean for each test")
     args = parser.parse_args()
 
     directories = glob(args.path+"*")
@@ -58,9 +65,11 @@ def main():
             csv_reader = csv.reader(csv_content)
             files_content.append([float(row[0]) for row in csv_reader if not (re.match("^\d+?\.\d+?$", row[0]) is None)])
 
-    get_stats_from(directories, files_content)
+    only_mean = args.mean if args.mean else False
 
-    get_global_stats(files_content)
+    get_stats_from(directories, files_content, only_mean)
+
+    get_global_stats(files_content, only_mean)
 
 if __name__ == '__main__':
     main()
