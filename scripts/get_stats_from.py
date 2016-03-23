@@ -12,32 +12,32 @@ def get_stats_from(files_names, files_content, only_mean):
         if not only_mean:
             file_name = files_names[i]
             print("FILE : {0}".format(files_names[i]))
-            print("\t*MEAN : {0}".format(statistics.mean(file_content)))
-            print("\t*MEDIAN : {0}".format(statistics.median(file_content)))
+            print("\t*MEAN : {0}mA".format(statistics.mean(file_content)))
+            print("\t*MEDIAN : {0}mA".format(statistics.median(file_content)))
             try:
-                print("\t*MOST TYPICAL VALUE : {0}".format(statistics.mode(file_content)))
+                print("\t*MOST TYPICAL VALUE : {0}mA".format(statistics.mode(file_content)))
             except:
                 print("2 most typical values!")
-            print("\t*STANDARD DEVIATION : {0}".format(statistics.stdev(file_content)))
+            print("\t*STANDARD DEVIATION : {0}mA".format(statistics.stdev(file_content)))
             print("\t*VARIANCE : {0}".format(statistics.variance(file_content)))
         else:
-            print("{0}".format(statistics.mean(file_content)))
+            print("{0}mA".format(statistics.mean(file_content)))
 
 def get_global_stats(files_content, only_mean):
     data = []
     for sublist in files_content:
         data = data + sublist
     if not only_mean:
-        print("*GLOBAL MEAN : {0}".format(statistics.mean(data)))
-        print("*GLOBAL MEDIAN : {0}".format(statistics.median(data)))
+        print("*GLOBAL MEAN : {0}mA".format(statistics.mean(data)))
+        print("*GLOBAL MEDIAN : {0}mA".format(statistics.median(data)))
         try:
-            print("*GLOBAL MOST TYPICAL VALUE : {0}".format(statistics.mode(data)))
+            print("*GLOBAL MOST TYPICAL VALUE : {0}mA".format(statistics.mode(data)))
         except:
             print("2 most typical values!")
-        print("*GLOBAL STANDARD DEVIATION : {0}".format(statistics.stdev(data)))
+        print("*GLOBAL STANDARD DEVIATION : {0}mA".format(statistics.stdev(data)))
         print("*GLOBAL VARIANCE : {0}".format(statistics.variance(data)))
     else:
-        print("{0}".format(statistics.mean(data)))
+        print("GLOBAL MEAN : {0}mA".format(statistics.mean(data)))
 
 def main():
     parser = argparse.ArgumentParser(description='Get stats from Powertool output')
