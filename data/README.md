@@ -1,4 +1,4 @@
-Each compressed file represents the energy consumption of an Android application, on 30 runs.  
+Each compressed file represents an energy consumption test, for a mobile application.
 
 Name of the compressed file: ```name.of.the.test.package-X.zip```.  
 
