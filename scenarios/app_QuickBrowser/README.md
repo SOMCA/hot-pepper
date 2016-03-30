@@ -17,10 +17,10 @@
 
 **Websites**:
 * www.caisse-epargne.fr/particuliers/accueil.aspx
-* legifrance.gouv.fr/
+* www.legifrance.gouv.fr/
 * www.privatesportshop.com/
-* service-public.fr/
-* pluzz.francetv.fr/
+* www.service-public.fr/
+* www.pluzz.francetv.fr/
 * www.green-acres.com/
 * www.studyrama.com/
 * www.pagesjaunes.fr/
