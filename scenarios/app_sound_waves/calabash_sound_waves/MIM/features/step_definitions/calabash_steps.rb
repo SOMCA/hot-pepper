@@ -9,11 +9,11 @@ Then(/^I drag left$/) do
 	perform_action('drag', 25, 75, 50, 50, 5)
 end
 
-Then(/^I drag bot$/) do
+Then(/^I drag up$/) do
 	perform_action('drag', 50, 50, 25, 75, 5)
 end
 
-Then(/^I drag top$/) do
+Then(/^I drag down$/) do
 	perform_action('drag', 50, 50, 75, 25, 5)
 end
 
@@ -53,7 +53,7 @@ Then(/^I switch ([^\"]*)$/) do |switch|
 	when switch == "list oldest"
 		touch("SwitchCompat id:'feed_oldest_first_switch'")
 	end
-	
+
 	sleep 1
 end
 ##
@@ -79,13 +79,13 @@ Then(/^I radio check ([^\"]*)$/) do |radio|
 
 	## Playlist
 	# Recent episodes | Queue episodes manually
-	
+
 	## Playlist(Bulk download)
 	# Published this Month | Published this Week | Top 10 episodes in the playlist | Published within the last 24 hours
 
 	## Subscription(Import OMPL File)
 	# Import OPML file | Export subscriptions to OPML
-	
+
 	case
 	# playlist filters
 	when radio == "custom"
@@ -361,9 +361,13 @@ Then(/^I enter an user and pass$/) do
 	touch("AppCompatEditText id:'gpodder_username'")
 	enter_text("AppCompatEditText id:'gpodder_username'", "user1")
 	sleep 1
+	press_back_button
+	sleep 1
 	touch("AppCompatEditText id:'gpodder_password'")
 	enter_text("AppCompatEditText id:'gpodder_password'", "pass1")
-	sleep 1	
+	sleep 1
+	press_back_button
+	sleep 1
 end
 
 Then(/^I press on test credentials$/) do
