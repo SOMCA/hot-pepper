@@ -11,7 +11,7 @@ def get_stats_from(files_names, files_content, only_mean):
         file_content = files_content[i]
         if not only_mean:
             file_name = files_names[i]
-            print("FILE : {0}".format(files_names[i]))
+            print("FILE - {0} measures: {1}".format(len(file_content), file_name))
             print("\t*MEAN : {0}mA".format(statistics.mean(file_content)))
             print("\t*MEDIAN : {0}mA".format(statistics.median(file_content)))
             try:
@@ -45,6 +45,8 @@ def main():
                         help="specify path to your directories")
     parser.add_argument('-m', '--mean', action="store_true", default=False,
                         help="Only compute the mean for each test")
+    parser.add_argument('-d', '--deterministic', type=int,
+                        help="Remove the n first values from data")
     args = parser.parse_args()
 
     directories = glob(args.path+"*")
@@ -63,7 +65,10 @@ def main():
     for csv_file in csv_files:
         with open(csv_file, "r") as csv_content:
             csv_reader = csv.reader(csv_content)
-            files_content.append([float(row[0]) for row in csv_reader if not (re.match("^\d+?\.\d+?$", row[0]) is None)])
+            if args.deterministic:
+                files_content.append([float(row[0]) for value, row in enumerate(csv_reader) if (not (re.match("^\d+?\.\d+?$", row[0]) is None)) and (value > args.deterministic)])
+            else:
+                files_content.append([float(row[0]) for value, row in enumerate(csv_reader) if (not (re.match("^\d+?\.\d+?$", row[0]) is None))])
 
     only_mean = args.mean if args.mean else False
 
