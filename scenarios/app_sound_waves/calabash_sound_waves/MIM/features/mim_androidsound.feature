@@ -3,10 +3,10 @@ Feature: Sound MIM
   Scenario:
 	Then I wait for a second
 	Then I drag right
-	
-	# Discover	
+
+	# Discover
 	Then I drag right
-	
+
 	# Subscriptions
 	Then I drag left
 	Then I check usage
@@ -57,7 +57,7 @@ Feature: Sound MIM
 	Then I switch show listned
 	Then I clic on apply filters
 	Then I wait for a second
-	
+
 
 	# Open the rigth menu
 	Then I swipe left
@@ -65,32 +65,86 @@ Feature: Sound MIM
 	Then I clic on download manager
 	Then I wait for a second
 	Then I back
-	
+
 	Then I wait for a second
-	
+
 	Then I drag right
 	Then I drag right
-	
+
 	# Discover
 	Then I wait for a second
 	Then I subscribe to harry
 	Then I wait for a second
 	Then I wait for a second
 	Then I choose on harry
-	Then I wait for a second
-	Then I clic on floating button
-	Then I wait for a second
-	Then I switch show episode
-	Then I switch add new ep
-	Then I switch dl new episode
-	Then I switch list oldest
-	Then I switch list oldest
-	Then I switch dl new episode
-	Then I clic on floating button
-	Then I drag bot
-	Then I wait for a second
+	Then I wait for 6 seconds
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag down
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
+	Then I drag up
 
-	# Settings
+		# Settings
 	Then I touch options menu
 	Then I touch on settings
 	Then I wait for a second
@@ -169,4 +223,3 @@ Feature: Sound MIM
 	Then I touch on reset
 	Then I wait for a second
 	Then I wait for a second
-
