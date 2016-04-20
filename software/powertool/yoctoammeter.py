@@ -1,7 +1,11 @@
 from datetime import timedelta
 
+import time
+
 from yoctopuce.yocto_api import YAPI, YRefParam, YModule
 from yoctopuce.yocto_current import YCurrent
+
+FRAMERATE = "100/s"
 
 class YoctoDevice(object):
     """Class to instantiate an ammeter device"""
@@ -14,6 +18,10 @@ class YoctoDevice(object):
             self._device = YCurrent.FindCurrent(".".join([self.serialNumber, 'current1']))
             if not self._device and not self.module.isOnline():
                 raise Exception('Could not get sensor device from ' + ammeter_serialnumber)
+            self._device.set_reportFrequency(FRAMERATE)
+            self._device.registerTimedReportCallback(self.addMeasure)
+            self._values = []
+            self._finished = False
         except Exception as init_exception:
             raise init_exception
 
@@ -26,6 +34,9 @@ class YoctoDevice(object):
             "---> BEACON state: %r" % self.beacon,
         ]
         return "\n".join(ammeter_info)
+
+    def addMeasure(self, fct, measure):
+        print(time.time(), " - ", measure.get_averageValue())
 
     @property
     def module(self):
@@ -87,3 +98,7 @@ class YoctoDevice(object):
     @beacon.setter
     def beacon(self, boolean):
         self.module.set_beacon(YModule.BEACON_ON if boolean else YModule.BEACON_OFF)
+
+    def run(self):
+        while not self._finished:
+            YAPI.Sleep(500)
