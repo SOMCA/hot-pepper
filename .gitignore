@@ -30,6 +30,9 @@ proguard/
 # Android Studio captures folder
 captures/
 
+# Python
+__pycache__/
+
 # Calabash
 calabash_steps.rb~
 test_servers/
