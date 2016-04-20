@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from yoctopuce.yocto_api import YAPI, YRefParam, YModule
 from yoctopuce.yocto_current import YCurrent
 
@@ -17,9 +19,11 @@ class YoctoDevice(object):
 
     def __repr__(self):
         ammeter_info = [
-            "* Yocto ammeter %r" % self.serialNumber,
+            "* Yocto ammeter %r (uptime %r)" % (self.serialNumber, self.uptime),
             "---> Hardware ID: %r" % self.hardwareId,
             "---> Logical name: %r" % self.logicalName,
+            "---> USB consumption: %r mA" % self.usbConsumption,
+            "---> BEACON state: %r" % self.beacon,
         ]
         return "\n".join(ammeter_info)
 
@@ -64,3 +68,22 @@ class YoctoDevice(object):
             return self._logical_name
         self._logical_name = self.module.get_logicalName()
         return self._logical_name
+
+    @property
+    def usbConsumption(self):
+        return self.module.get_usbCurrent()
+
+    @property
+    def uptime(self):
+        return str(timedelta(milliseconds = self.module.get_upTime()))
+
+    @property
+    def beacon(self):
+        if hasattr(self, '_beacon') and self._beacon:
+            return self._beacon
+        self._beacon = self.module.get_beacon()
+        return self._beacon
+
+    @beacon.setter
+    def beacon(self, boolean):
+        self.module.set_beacon(YModule.BEACON_ON if boolean else YModule.BEACON_OFF)
