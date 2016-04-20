@@ -61,6 +61,7 @@ def main():
 	parser.add_argument('-b', '--begin', type=int, default=1, help="The beginning to run tests")
 	parser.add_argument('-f', '--feature', type=str, default=None, help="Specify the feature to run")
 	parser.add_argument('-n', '--nbr', type=int, default=31, help="Number of tests to run")
+	parser.add_argument('--gc', action="store_true", help="Launch a phone application to ask to Android to run the garbage collector - before each test")
 	parser.add_argument('-o', '--output', type=str, default=None, required=True, help="Specify output path")
 	parser.add_argument('-r', '--refactored', type=str, default=None, help="Specify if the application is refactored")
 	parser.add_argument('-s', '--scenario', type=str, default=None, help="Specify the scenario to run")
@@ -85,6 +86,13 @@ def main():
 		p = subprocess.Popen(["adb","shell","am","force-stop",args.app], shell=False)
 		p.wait()
 
+		if args.gc:
+			# The application "PAPRIKA_gccall.apk" must be installed on the Android smartphone!
+			gc_call = subprocess.Popen(["adb","shell","am","start","-n","paprika.io.gccall/.MainActivity"], shell=False)
+			gc_call.wait()
+
+		time.sleep(5)
+
 		thread_stop= threading.Event()
 
 		ttest = threading.Thread(target = threaded_test, args=(thread_stop,x,args.app,args.feature,args.scenario))
@@ -94,8 +102,6 @@ def main():
 
 		ttest.join()
 		tpower.join()
-
-		time.sleep(5)
 
 	print("DONE")
 
