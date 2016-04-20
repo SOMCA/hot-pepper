@@ -29,3 +29,9 @@ proguard/
 
 # Android Studio captures folder
 captures/
+
+# Calabash
+calabash_steps.rb~
+test_servers/
+*.png
+*.irb-history
