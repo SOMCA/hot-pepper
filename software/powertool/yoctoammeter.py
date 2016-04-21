@@ -6,12 +6,10 @@ from time import time
 from yoctopuce.yocto_api import YAPI, YRefParam, YModule
 from yoctopuce.yocto_current import YCurrent
 
-FRAMERATE = "100/s"
-
 class YoctoDevice(object):
     """Class to instantiate an ammeter device"""
 
-    def __init__(self):
+    def __init__(self, framerate):
         super(YoctoDevice, self).__init__()
 
         try:
@@ -19,7 +17,7 @@ class YoctoDevice(object):
             self._device = YCurrent.FindCurrent(".".join([self.serialNumber, 'current1']))
             if not self._device and not self.module.isOnline():
                 raise Exception('Could not get sensor device from ' + ammeter_serialnumber)
-            self._device.set_reportFrequency(FRAMERATE)
+            self._device.set_reportFrequency(framerate)
             self._device.registerTimedReportCallback(self.addMeasure)
             self._finished = threading.Event()
             self._init_time = None
