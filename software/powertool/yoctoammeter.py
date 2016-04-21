@@ -1,6 +1,7 @@
 from datetime import timedelta
 
-import time
+import threading
+from time import time
 
 from yoctopuce.yocto_api import YAPI, YRefParam, YModule
 from yoctopuce.yocto_current import YCurrent
@@ -20,8 +21,9 @@ class YoctoDevice(object):
                 raise Exception('Could not get sensor device from ' + ammeter_serialnumber)
             self._device.set_reportFrequency(FRAMERATE)
             self._device.registerTimedReportCallback(self.addMeasure)
+            self._finished = threading.Event()
+            self._init_time = None
             self._values = []
-            self._finished = False
         except Exception as init_exception:
             raise init_exception
 
@@ -36,7 +38,17 @@ class YoctoDevice(object):
         return "\n".join(ammeter_info)
 
     def addMeasure(self, fct, measure):
-        print(time.time(), " - ", measure.get_averageValue())
+        current_time = (time() - self._init_time)
+        self._values.append(("{:2.3f}".format(current_time), measure.get_averageValue()))
+
+    def stopMeasure(self):
+        self._finished.set()
+
+    def launchMeasure(self):
+        self._init_time = time()
+        while not self._finished.isSet():
+            YAPI.Sleep(500)
+        print("Process finished!")
 
     @property
     def module(self):
@@ -100,5 +112,6 @@ class YoctoDevice(object):
         self.module.set_beacon(YModule.BEACON_ON if boolean else YModule.BEACON_OFF)
 
     def run(self):
-        while not self._finished:
-            YAPI.Sleep(500)
+        # check if the thread has been done or not...
+        print("Launching runs...")
+        threading.Thread(target=self.launchMeasure).start()
