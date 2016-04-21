@@ -2,9 +2,9 @@
 
 **LightPowertool** is a software to measure automatically the energy consumption
 of electronic devices.  
-This software has been developed to have a single and simple Yoctopuce tool to measure the energy consumption of a connected device, for a given during time.
+This software has been developed to have a simply measure the energy consumption of a connected device, for a given during time (for example, a smartphone).
 
-***Notice***: **LightPowertool** is a light version of the powerfull [FxOS-Powertool](https://github.com/JonHylands/fxos-powertool) program. We are NOT affliated to Mozilla.
+***Notice***: **LightPowertool** is a light version of the powerfull [FxOS-Powertool](https://github.com/JonHylands/fxos-powertool) program. We are NOT affliated with Mozilla.
 
 ## How to use it ?
 
