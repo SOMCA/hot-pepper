@@ -1,8 +1,7 @@
-from datetime import timedelta
-
 import threading
-from time import time
 
+from datetime import timedelta
+from time import time
 from yoctopuce.yocto_api import YAPI, YRefParam, YModule
 from yoctopuce.yocto_current import YCurrent
 
