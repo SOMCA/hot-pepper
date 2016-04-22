@@ -8,6 +8,8 @@ This software has been developed to have a simply measure the energy consumption
 
 ## How to use it ?
 
+### LightPowertool
+
 Please to install the Python Yoctopuce library from the [public and official Yoctopuce website](http://www.yoctopuce.com/FR/libraries.php), or with Pypi:  
 ```
 pip3 install yoctopuce
