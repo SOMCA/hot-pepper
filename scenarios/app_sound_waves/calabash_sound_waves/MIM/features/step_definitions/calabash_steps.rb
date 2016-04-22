@@ -1,4 +1,11 @@
 require 'calabash-android/calabash_steps'
+require 'socket'
+
+Then(/^I Send information about ([^\"]*)$/) do |message|
+	sock = TCPSocket.new("127.0.0.1", 8888)
+	sock.write "#{message}"
+	sock.close
+end
 
 ## Swipe the screen
 Then(/^I drag right$/) do
