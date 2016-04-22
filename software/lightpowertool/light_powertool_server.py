@@ -1,5 +1,6 @@
 import socket
 import sys
+from classes.csv_export import CSVExport
 from _thread import start_new_thread
 from time import sleep
 
@@ -10,6 +11,7 @@ class LightPowertoolServer(object):
 
         self._HOST = HOST
         self._PORT = PORT
+        self._data = []
         self._socket = self.socket
 
     @property
@@ -29,13 +31,17 @@ class LightPowertoolServer(object):
         return self._socket
 
     def get_communication(self, conn, addr):
+        ip = addr[0]
+        port = str(addr[1])
         while True:
-            data = conn.recv(1024)
+            data = conn.recv(1024).decode(encoding='UTF-8').strip()
+            data = set(data.split("-"))
             if data:
-                print(data)
+                print("%s, from %s on port %s" % (data, ip, port))
+                self._data.append(data)
             else:
                 break
-        print('Lost connection with %s on port %s' % (addr[0], str(addr[1])))
+        print('Lost connection with %s on port %s' % (ip, port))
         conn.close()
 
     def run(self):
@@ -50,6 +56,8 @@ class LightPowertoolServer(object):
     def shutdown(self):
         print('Socket is closing...')
         self._socket.close()
+        csv_file = CSVExport("ex.csv")
+        csv_file.export_data(self._data)
 
 def main():
     server = LightPowertoolServer("127.0.0.1", 8888)
