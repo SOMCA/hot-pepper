@@ -1,9 +1,10 @@
 require 'calabash-android/calabash_steps'
 require 'socket'
 
-Then(/^I Send information about ([^\"]*)$/) do |message|
+Then(/^I send information about ([^\"]*)$/) do |message|
 	sock = TCPSocket.new("127.0.0.1", 8888)
-	sock.write "#{message}"
+	sock.send("#{message}\000", 0)
+	sock.flush
 	sock.close
 end
 
