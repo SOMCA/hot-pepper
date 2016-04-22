@@ -18,6 +18,14 @@ Go to the main directory (```software/light_powertool/```), plug your Yoctopuce 
 python3.4 light_powertool
 ```
 
+### LightPowertoolServer
+
+**LightPowertoolServer** is a local server to receive some informations from the **LightPowertool** software, and save it into a CSV file (for example a list of measures and timestamps).  
+You can use it by launching it with:
+```
+python3.4 light_powertool_server.py
+```
+
 #### Arguments
 
 ```
