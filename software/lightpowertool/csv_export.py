@@ -7,7 +7,9 @@ class CSVExport(object):
         self._filename = filename
 
     def export_data(self, data):
+        print("Beginning exportation of data...")
         with open(self._filename, "w", newline='') as csvfile:
             csvwriter = csv.writer(csvfile, delimiter=',')
             for single_data in data:
                 csvwriter.writerow(list(single_data))
+        print("Exportation has been done!")
