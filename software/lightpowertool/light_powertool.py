@@ -11,6 +11,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--framerate", type=str, default="50/s",
                         help="Give to the main program the framerate.")
+    parser.add_argument("-n", "--network", action="store_true",
+                        help="Use the network to send your data - local server like LightPowertoolServer")
     parser.add_argument("-o", "--output", type=str,
                         help="Give an output file name to store measured values.")
     parser.add_argument("-s", "--statistics", action="store_true",
@@ -20,7 +22,7 @@ def main():
     args = parser.parse_args()
 
     #Get the yocto device
-    yocto_device = YoctoDevice(args.framerate)
+    yocto_device = YoctoDevice(args.framerate, network=args.network)
     print(yocto_device)
 
     yocto_device.run()
