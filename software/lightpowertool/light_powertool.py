@@ -1,9 +1,9 @@
 import argparse
 
-from cstatistics import CStatistics
-from csv_export import CSVExport
+from classes.cstatistics import CStatistics
+from classes.csv_export import CSVExport
 from time import sleep
-from yoctoammeter import YoctoDevice
+from classes.yoctoammeter import YoctoDevice
 
 def main():
 
