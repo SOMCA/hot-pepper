@@ -1,6 +1,7 @@
 import threading
 
 from datetime import timedelta
+from socket import socket
 from time import time
 from yoctopuce.yocto_api import YAPI, YRefParam, YModule
 from yoctopuce.yocto_current import YCurrent
@@ -8,7 +9,7 @@ from yoctopuce.yocto_current import YCurrent
 class YoctoDevice(object):
     """Class to instantiate an ammeter device"""
 
-    def __init__(self, framerate):
+    def __init__(self, framerate, network):
         super(YoctoDevice, self).__init__()
 
         try:
@@ -21,6 +22,8 @@ class YoctoDevice(object):
             self._finished = threading.Event()
             self._init_time = None
             self._values = []
+            self._network = network
+            self._socket = None if not self._network else socket()
         except Exception as init_exception:
             raise init_exception
 
@@ -36,7 +39,10 @@ class YoctoDevice(object):
 
     def addMeasure(self, fct, measure):
         current_time = (time() - self._init_time)
-        self._values.append(("{:2.3f}".format(current_time), measure.get_averageValue()))
+        data_to_store = ("{:2.3f}".format(current_time), measure.get_averageValue())
+        if self._network:
+            self._socket.sendall(bytes("-".join([str(value) for value in data_to_store]), "UTF-8"))
+        self._values.append(data_to_store)
 
     def stopMeasure(self):
         self._finished.set()
@@ -111,4 +117,6 @@ class YoctoDevice(object):
     def run(self):
         # check if the thread has been done or not...
         print("Launching runs...")
+        if self._network:
+            self._socket.connect(("127.0.0.1", 8888))
         threading.Thread(target=self.launchMeasure).start()
