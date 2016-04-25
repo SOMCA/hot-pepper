@@ -39,7 +39,8 @@ def main():
     yocto_device.stopMeasure()
 
     if args.output:
-        CSVExport(args.output).export_data(yocto_device._values)
+        CSVExport(args.output)\
+            .export_data((value for value in yocto_device._values))
 
     if args.statistics:
         measures = [y for x, y in yocto_device._values]
