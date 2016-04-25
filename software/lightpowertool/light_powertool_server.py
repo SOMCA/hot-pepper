@@ -70,7 +70,7 @@ def main():
     """
     # Parse arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("-h", "--host", default="127.0.0.1",
+    parser.add_argument("--host", default="127.0.0.1",
                         help="Server host.")
     parser.add_argument("-p", "--port", type=int, default=8888,
                         help="Port to listen.")
