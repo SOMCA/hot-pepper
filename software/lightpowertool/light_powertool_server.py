@@ -1,3 +1,4 @@
+import argparse
 import socket
 import sys
 from classes.csv_export import CSVExport
@@ -60,10 +61,27 @@ class LightPowertoolServer(object):
         csv_file.export_data(self._data)
 
 def main():
-    server = LightPowertoolServer("127.0.0.1", 8888)
+    r"""
+    Main program of LightPowertoolServer.
+
+    LightPowertoolServer is a software to communicate\
+     between the energy measurement software (LightPowertool)\
+     and the tests runner (Calabash).
+    """
+    # Parse arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-h", "--host", default="127.0.0.1",
+                        help="Server host.")
+    parser.add_argument("-p", "--port", type=int, default=8888,
+                        help="Port to listen.")
+    parser.add_argument("-s", "--sleep", type=int, default=60,
+                        help="Time to sleep listening data.")
+    args = parser.parse_args()
+
+    server = LightPowertoolServer(args.host, args.port)
     start_new_thread(server.run, ())
     # For example, close the socket after 60 running seconds
-    sleep(60)
+    sleep(args.sleep)
     server.shutdown()
 
 if __name__ == '__main__':
