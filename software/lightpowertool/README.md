@@ -20,14 +20,6 @@ Go to the main directory (```software/light_powertool/```), plug your Yoctopuce 
 python3.4 light_powertool
 ```
 
-### LightPowertoolServer
-
-**LightPowertoolServer** is a local server to receive some informations from the **LightPowertool** software, and save it into a CSV file (for example a list of measures and timestamps).  
-You can use it by launching it with:
-```
-python3.4 light_powertool_server.py
-```
-
 #### Arguments
 
 ```
@@ -42,6 +34,27 @@ optional arguments:
   -s, --statistics      Ask to output basic statistics (mean, median,
                         pvariance,...) on measured values.
   -t TIME, --time TIME  Due time to measure data.
+```
+
+### LightPowertoolServer
+
+**LightPowertoolServer** is a local server to receive some informations from the **LightPowertool** software, and save it into a CSV file (for example a list of measures and timestamps).  
+You can use it by launching it with:
+```
+python3.4 light_powertool_server.py
+```
+
+#### Arguments
+
+```
+usage: light_powertool_server.py [-h] [--host HOST] [-p PORT] [-s SLEEP]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --host HOST           Server host.
+  -p PORT, --port PORT  Port to listen.
+  -s SLEEP, --sleep SLEEP
+                        Time to sleep listening data.
 ```
 
 ## Contributing
