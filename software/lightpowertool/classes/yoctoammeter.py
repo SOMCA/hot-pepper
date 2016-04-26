@@ -52,6 +52,8 @@ class YoctoDevice(object):
         while not self._finished.isSet():
             YAPI.Sleep(500)
         print("Process finished!")
+        # Close the server automatically
+        self._socket.sendall(bytes("FINISHED"), "UTF-8")
 
     @property
     def module(self):
