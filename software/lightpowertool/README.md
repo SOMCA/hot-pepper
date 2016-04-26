@@ -1,8 +1,7 @@
-# Light Powertool
+# LightPowertool Suite
 
-**LightPowertool** is a software to measure automatically the energy consumption
-of electronic devices.  
-This software has been developed to have a simply measure the energy consumption of a connected device, for a given during time (for example, a smartphone).
+The **LightPowertool** suite is a suite of tools to measure automatically the energy consumption of electronic devices. This suite contains a energy measurement tool named **LightPowertool** and a server named **LightPowertoolServer**.  
+**LightPowertool** has been developed to have a simply measure the energy consumption of a connected device, for a given during time (for example, a smartphone).
 
 ***Notice***: **LightPowertool** is a light version of the powerfull [FxOS-Powertool](https://github.com/JonHylands/fxos-powertool) program. We are NOT affliated with Mozilla.
 
@@ -57,12 +56,16 @@ optional arguments:
                         Time to sleep listening data.
 ```
 
+#### Note
+
+If you use **LightPowertool** and **LightPowertoolServer** for your energy measurements, **LightPowertool** will send a "FINISHED" command to **LightPowertoolServer** that will shut itself down.
+
 ## Contributing
 
-**LightPowertool** is still in development.  
+The **LightPowertool** suite is still in development.  
 Found a bug? We'd love to know about it!  
 Please report all issues on the github issue tracker.
 
 ## License
 
-**LightPowertool** is primarily distributed under the terms of the AGPL license.
+The **LightPowertool** suite is primarily distributed under the terms of the AGPL license.
