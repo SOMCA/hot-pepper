@@ -51,9 +51,10 @@ class YoctoDevice(object):
         self._init_time = time()
         while not self._finished.isSet():
             YAPI.Sleep(500)
-        print("Process finished!")
         # Close the server automatically
-        self._socket.sendall(bytes("FINISHED"), "UTF-8")
+        if self._network:
+            self._socket.sendall(bytes("FINISHED"), "UTF-8")
+        print("Process finished!")
 
     @property
     def module(self):
