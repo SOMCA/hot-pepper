@@ -37,7 +37,7 @@ class LightPowertoolServer(object):
         while True:
             data = conn.recv(1024).decode(encoding='UTF-8').strip()
             data = data.split("-")
-            if data and not data[0]:
+            if data and not data[0] and not data == "FINISHED":
                 print("%s, from %s on port %s" % (data, ip, port))
                 self._data.append(data)
             else:
