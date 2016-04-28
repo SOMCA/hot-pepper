@@ -14,6 +14,7 @@ class LightPowertoolServer(object):
         self._PORT = PORT
         self._data = []
         self._socket = self.socket
+        self._tosave = "ex.csv"
 
     @property
     def socket(self):
@@ -37,9 +38,18 @@ class LightPowertoolServer(object):
         while True:
             data = conn.recv(1024).decode(encoding='UTF-8').strip()
             data = data.split("-")
-            if data and not data[0] and not data == "FINISHED":
-                print("%s, from %s on port %s" % (data, ip, port))
-                self._data.append(data)
+            if data and data[0]:
+                if data[0] == "FINISHED":
+                    csv_file = CSVExport(self._tosave)
+                    csv_file.export_data(self._data)
+                    self._tosave = "ex.csv"
+                    self._data.clear()
+                    break
+                elif data[0] == "NEW":
+                    self._tosave = data[1]
+                else:
+                    # print("%s, from %s on port %s" % (data, ip, port))
+                    self._data.append(data)
             else:
                 break
         print('Lost connection with %s on port %s' % (ip, port))
@@ -57,7 +67,7 @@ class LightPowertoolServer(object):
     def shutdown(self):
         print('Socket is closing...')
         self._socket.close()
-        csv_file = CSVExport("ex.csv")
+        csv_file = CSVExport(self._tosave)
         csv_file.export_data(self._data)
 
 def main():
