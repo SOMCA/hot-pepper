@@ -30,6 +30,8 @@ optional arguments:
                         Give to the main program the framerate.
   -o OUTPUT, --output OUTPUT
                         Give an output file name to store measured values.
+  -c, --csv             Export to CSV file
+  -j, --json            Export to JSON file
   -s, --statistics      Ask to output basic statistics (mean, median,
                         pvariance,...) on measured values.
   -t TIME, --time TIME  Due time to measure data.

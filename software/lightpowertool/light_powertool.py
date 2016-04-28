@@ -2,6 +2,7 @@ import argparse
 
 from classes.cstatistics import CStatistics
 from classes.csv_export import CSVExport
+from classes.json_export import JSONExport
 from time import sleep
 from classes.yoctoammeter import YoctoDevice
 
@@ -23,6 +24,10 @@ def main():
     parser.add_argument("-o", "--output", type=str,
                         help="Give an output file name\
                          to store measured values.")
+    parser.add_argument("-c", "--csv", action="store_true",
+                        help="Export to CSV file")
+    parser.add_argument("-j", "--json", action="store_true",
+                        help="Export to JSON file")
     parser.add_argument("-s", "--statistics", action="store_true",
                         help="Ask to output basic statistics\
                          (mean, median, pvariance,...) on measured values.")
@@ -39,8 +44,12 @@ def main():
     yocto_device.stopMeasure()
 
     if args.output:
-        CSVExport(args.output)\
+        if args.csv:
+            CSVExport(args.output)\
             .export_data((value for value in yocto_device._values))
+        elif args.json:
+            JSONExport(args.output)\
+            .export((value for value in yocto_device._values))
 
     if args.statistics:
         measures = [y for x, y in yocto_device._values]
