@@ -46,14 +46,14 @@ class YoctoDevice(object):
 
     def stopMeasure(self):
         self._finished.set()
+        # Close the server automatically
+        if self._network:
+            self._socket.sendall(bytes("FINISHED", "UTF-8"))
 
     def launchMeasure(self):
         self._init_time = time()
         while not self._finished.isSet():
             YAPI.Sleep(500)
-        # Close the server automatically
-        if self._network:
-            self._socket.sendall(bytes("FINISHED"), "UTF-8")
         print("Process finished!")
 
     @property
