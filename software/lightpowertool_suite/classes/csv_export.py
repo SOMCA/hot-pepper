@@ -12,4 +12,4 @@ class CSVExport(object):
             csvwriter = csv.writer(csvfile, delimiter=',')
             for single_data in data:
                 csvwriter.writerow(list(single_data))
-        print("Exportation has been done!")
+        print("---" + self._filename + ".csv created! ---")
