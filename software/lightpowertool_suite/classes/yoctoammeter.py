@@ -45,10 +45,10 @@ class YoctoDevice(object):
         self._values.append(data_to_store)
 
     def stopMeasure(self):
-        self._finished.set()
         # Close the server automatically
         if self._network:
             self._socket.sendall(bytes("FINISHED", "UTF-8"))
+        self._finished.set()
 
     def launchMeasure(self):
         self._init_time = time()
