@@ -109,6 +109,7 @@ def main():
 		yocto_device = None
 
 		try:
+			# Default framerate is 75/s
 			yocto_device = YoctoDevice("75/s", True)
 			print(yocto_device)
 		except Exception as yocto_exception:
