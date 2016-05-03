@@ -49,30 +49,24 @@ def main():
                         help="Remove the n first values from data")
     args = parser.parse_args()
 
-    directories = glob(args.path+"*")
-
-    if len(directories) == 0:
-        sys.exit(1)
-
     csv_files = []
 
-    for directory in directories:
-        current_files = [x for x in glob(directory + "/*") if ".csv" in x]
-        csv_files = csv_files + current_files
+    # for directory in directories:
+    current_files = [x for x in glob(args.path + "/*") if ".csv" in x]
+    csv_files = csv_files + current_files
+
+    print(csv_files)
 
     files_content = []
 
     for csv_file in csv_files:
         with open(csv_file, "r") as csv_content:
             csv_reader = csv.reader(csv_content)
-            if args.deterministic:
-                files_content.append([float(row[0]) for value, row in enumerate(csv_reader) if (not (re.match("^\d+?\.\d+?$", row[0]) is None)) and (value > args.deterministic)])
-            else:
-                files_content.append([float(row[0]) for value, row in enumerate(csv_reader) if (not (re.match("^\d+?\.\d+?$", row[0]) is None))])
+            files_content.append([float(row[1]) for row in csv_reader if (not (re.match("^\d+?\.\d+?$", row[1]) is None))])
 
     only_mean = args.mean if args.mean else False
 
-    get_stats_from(directories, files_content, only_mean)
+    get_stats_from(csv_files, files_content, only_mean)
 
     get_global_stats(files_content, only_mean)
 
