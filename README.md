@@ -15,3 +15,8 @@ Credits
 -------
 
 Latece(UQÀM) / Spirals(INRIA) teams
+
+License
+-------
+
+GAGPL (Version 3)
