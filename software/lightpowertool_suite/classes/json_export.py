@@ -1,11 +1,12 @@
 import json
 
 class JSONExport(object):
-    def __init__(slef,filename):
+    """docstring for JSONExport"""
+    def __init__(self, filename):
         super(JSONExport, self).__init__()
         self._filename = filename
 
-    def export(self,measure):
+    def export(self, measure):
         print("--- Exporting to JSON ---")
         with open(self._filename + '.json', 'w') as jsonfile:
             json.dump(measure, jsonfile, indent = 4)

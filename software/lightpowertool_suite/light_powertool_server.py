@@ -1,20 +1,23 @@
 import argparse
 import socket
 import sys
+import os
 from classes.csv_export import CSVExport
+from classes.json_export import JSONExport
 from _thread import start_new_thread
 from time import sleep
 
 class LightPowertoolServer(object):
 
-    def __init__(self, HOST, PORT):
+    def __init__(self, HOST, PORT, name):
         super(LightPowertoolServer, self).__init__()
 
         self._HOST = HOST
         self._PORT = PORT
         self._data = []
         self._socket = self.socket
-        self._tosave = "ex.csv"
+        self._name = name
+        self._num = 0
 
     @property
     def socket(self):
@@ -32,6 +35,21 @@ class LightPowertoolServer(object):
             sys.exit()
         return self._socket
 
+    def name_test(self, num):
+        return "Test_" + self._name + "_" + str(self._num)
+
+    def test_dir(self, dirname):
+        if not os.path.isdir(dirname):
+            os.mkdir(dirname)
+            os.chdir(dirname)
+        else:
+            os.chdir(dirname)
+            if not os.path.isdir(self._name):
+                os.mkdir(self._name)
+                os.chdir(self._name)
+            else:
+                os.chdir(self._name)
+
     def get_communication(self, conn, addr):
         ip = addr[0]
         port = str(addr[1])
@@ -40,15 +58,15 @@ class LightPowertoolServer(object):
             data = data.split("-")
             if data and data[0]:
                 if data[0] == "FINISHED":
-                    csv_file = CSVExport(self._tosave)
+                    csv_file = CSVExport(self.name_test(self._num))
                     csv_file.export_data(self._data)
-                    self._tosave = "ex.csv"
+                    self._num += 1
                     self._data.clear()
                     break
                 elif data[0] == "NEW":
                     self._tosave = data[1]
                 else:
-                    # print("%s, from %s on port %s" % (data, ip, port))
+                    print("%s, from %s on port %s" % (data, ip, port))
                     self._data.append(data)
             else:
                 break
@@ -67,8 +85,11 @@ class LightPowertoolServer(object):
     def shutdown(self):
         print('Socket is closing...')
         self._socket.close()
-        csv_file = CSVExport(self._tosave)
+        csv_file = CSVExport(self.name_test(self._num))
         csv_file.export_data(self._data)
+
+        #json_file = JSONExport(self._tosave)
+        #json_file.export(self._data)
 
 def main():
     r"""
@@ -86,9 +107,13 @@ def main():
                         help="Port to listen.")
     parser.add_argument("-s", "--sleep", type=int, default=60,
                         help="Time to sleep listening data.")
+    parser.add_argument("-n", "--name", type=str,
+                        help="Test name.")
     args = parser.parse_args()
 
-    server = LightPowertoolServer(args.host, args.port)
+    server = LightPowertoolServer(args.host, args.port, args.name)
+    # Create the "tests" directory to save the measures 
+    server.test_dir("tests")
     start_new_thread(server.run, ())
     # For example, close the socket after 60 running seconds
     sleep(args.sleep)

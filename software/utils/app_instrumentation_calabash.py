@@ -77,8 +77,7 @@ def force_stop_app(app):
 
 def get_new_output(output, app, refactored, instance):
 	# Output name for non-refactored application
-	return "/".join([output, "/{0}_test_{1}.csv".format(app.split("/")[-1], instance)]) if not refactored
-		   else return "/".join([output, "/{0}_test_R{1}_{2}.csv".format(app.split("/")[-1], refactored, instance)])
+	return ("/".join([output, "/{0}_test_{1}.csv".format(app.split("/")[-1], instance)])) if (not refactored) else ("/".join([output, "/{0}_test_R{1}_{2}.csv".format(app.split("/")[-1], refactored, instance)]))
 
 def main():
 
