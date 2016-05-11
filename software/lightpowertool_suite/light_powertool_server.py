@@ -36,19 +36,16 @@ class LightPowertoolServer(object):
         return self._socket
 
     def name_test(self, num):
-        return "Test_" + self._name + "_" + str(self._num)
+        return "_".join(["Test",self._name,str(self._num)])
 
     def test_dir(self, dirname):
+        os.chdir(dirname)
         if not os.path.isdir(dirname):
             os.mkdir(dirname)
-            os.chdir(dirname)
         else:
-            os.chdir(dirname)
+            os.chdir(self._name)
             if not os.path.isdir(self._name):
                 os.mkdir(self._name)
-                os.chdir(self._name)
-            else:
-                os.chdir(self._name)
 
     def get_communication(self, conn, addr):
         ip = addr[0]
@@ -79,7 +76,6 @@ class LightPowertoolServer(object):
             # wait to accept a connection - blocking call
             conn, addr = self._socket.accept()
             print('Connected with %s on port %s!' % (addr[0], str(addr[1])))
-
             start_new_thread(self.get_communication, (conn, addr))
 
     def shutdown(self):
@@ -112,7 +108,7 @@ def main():
     args = parser.parse_args()
 
     server = LightPowertoolServer(args.host, args.port, args.name)
-    # Create the "tests" directory to save the measures 
+    # Create the "tests" directory to save the measures
     server.test_dir("tests")
     start_new_thread(server.run, ())
     # For example, close the socket after 60 running seconds
