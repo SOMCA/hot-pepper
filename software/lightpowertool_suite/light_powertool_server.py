@@ -2,8 +2,8 @@ import argparse
 import socket
 import sys
 import os
-from classes.csv_export import CSVExport
-from classes.json_export import JSONExport
+from classes.export_data.csv_export import CSVExport
+from classes.export_data.json_export import JSONExport
 from _thread import start_new_thread
 from time import sleep
 

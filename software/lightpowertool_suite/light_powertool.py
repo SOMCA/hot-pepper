@@ -1,8 +1,8 @@
 import argparse
 
 from classes.cstatistics import CStatistics
-from classes.csv_export import CSVExport
-from classes.json_export import JSONExport
+from classes.export_data.csv_export import CSVExport
+from classes.export_data.json_export import JSONExport
 from time import sleep
 from classes.yoctoammeter import YoctoDevice
 
