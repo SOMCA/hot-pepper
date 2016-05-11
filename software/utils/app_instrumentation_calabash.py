@@ -7,6 +7,7 @@ import time
 from subprocess import call
 from datetime import datetime
 from yoctoammeter import YoctoDevice
+from cstatistics import CStatistics
 
 gc_app = "PAPRIKA_gccall.apk"
 
@@ -129,6 +130,8 @@ def main():
 		ttest.join()
 		# ... and stop the yocto device!
 		yocto_device.stopMeasure()
+
+		print(CStatistics(yocto_device._values))
 
 	print("DONE")
 
