@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 
 class PATTERNExport(ABC):
-    def __init__(self, filename):
+    def __init__(self, filename, format_data):
         super(PATTERNExport, self).__init__()
-        self._filename = filename
+        self._filename = filename if format_data in filename else ".".join([filename, format_data])
 
     @staticmethod
     def decor(func):

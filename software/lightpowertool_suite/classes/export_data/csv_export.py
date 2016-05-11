@@ -5,7 +5,7 @@ from export_pattern import PATTERNExport
 class CSVExport(PATTERNExport):
     """docstring for CSVExport"""
     def __init__(self, filename):
-        super(CSVExport, self).__init__(filename)
+        super(CSVExport, self).__init__(filename, "csv")
 
     @PATTERNExport.decor
     def export_data(self, data):

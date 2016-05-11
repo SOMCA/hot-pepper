@@ -5,7 +5,7 @@ from export_pattern import PATTERNExport
 class JSONExport(PATTERNExport):
     """docstring for JSONExport"""
     def __init__(self, filename):
-        super(JSONExport, self).__init__(filename)
+        super(JSONExport, self).__init__(filename, "json")
 
     @PATTERNExport.decor
     def export_data(self, data):
