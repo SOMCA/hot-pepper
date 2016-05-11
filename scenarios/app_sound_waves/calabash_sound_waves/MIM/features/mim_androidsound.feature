@@ -1,7 +1,6 @@
 Feature: Sound MIM
 
   Scenario:
-  Then I send information about beginning
   Then I wait for a second
 	Then I drag right
 
@@ -10,12 +9,10 @@ Feature: Sound MIM
 
 	# Subscriptions
 	Then I drag left
-  Then I send information about usage
 	Then I check usage
 	Then I wait for a second
 	Then I check cloud
 	Then I wait for a second
-  Then I send information about cloud
 	Then I check cloud
 	Then I touch options menu
 	Then I wait for a second
@@ -25,7 +22,6 @@ Feature: Sound MIM
 	Then I press ok
 	Then I wait for a second
 	Then I touch options menu
-  Then I send information about podcast
 	Then I touch on add podcast
 	Then I enter an url
 	Then I wait for a second
@@ -34,7 +30,6 @@ Feature: Sound MIM
 
 
 	# Playlsit
-  Then I send information about playlist
 	Then I drag left
 	Then I radio check recent
 	Then I wait for a second
@@ -77,7 +72,6 @@ Feature: Sound MIM
 	Then I drag right
 
 	# Discover
-  Then I send information about scrolling
 	Then I wait for a second
 	Then I subscribe to harry
 	Then I wait for a second
@@ -151,18 +145,16 @@ Feature: Sound MIM
 	Then I drag up
 
 		# Settings
-  Then I send information about settings
 	Then I touch options menu
 	Then I touch on settings
 	Then I wait for a second
+  
 		## Help
-  Then I send information about help
 	Then I touch help
 	Then I wait for a second
 	Then I back settings
 
 		## User interface
-  Then I send information about interface
 	Then I touch user interface
 	Then I touch subscription columns
 	Then I wait for a second
@@ -182,7 +174,6 @@ Feature: Sound MIM
 	Then I back settings
 
 		## Network
-  Then I send information about network
 	Then I touch network
 	Then I wait for a second
 	Then I select wifi only
@@ -193,7 +184,6 @@ Feature: Sound MIM
 	Then I back settings
 
 		## Cloud
-  Then Then I send information about cloud
 	Then I touch cloud
 	Then I select enable cloud
 	Then I touch gpodder
@@ -228,7 +218,6 @@ Feature: Sound MIM
 	Then I drag left
 
 	# Playlist
-  Then I send information about playlist
 	Then I wait for a second
 	Then I touch options menu
 	Then I wait for a second
