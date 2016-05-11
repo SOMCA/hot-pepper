@@ -131,7 +131,7 @@ def main():
 		# ... and stop the yocto device!
 		yocto_device.stopMeasure()
 
-		print(CStatistics(yocto_device._values))
+		print(CStatistics([y for x, y in yocto_device._values]))
 
 	print("DONE")
 
