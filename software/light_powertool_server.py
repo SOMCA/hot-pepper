@@ -1,9 +1,6 @@
 import argparse
 import socket
 import sys
-import os
-from classes.export_data.csv_export import CSVExport
-from classes.export_data.json_export import JSONExport
 from _thread import start_new_thread
 from time import sleep
 
@@ -35,18 +32,6 @@ class LightPowertoolServer(object):
             sys.exit()
         return self._socket
 
-    def name_test(self, num):
-        return "_".join(["Test",self._name,str(self._num)])
-
-    def test_dir(self, dirname):
-        os.chdir(dirname)
-        if not os.path.isdir(dirname):
-            os.mkdir(dirname)
-        else:
-            os.chdir(self._name)
-            if not os.path.isdir(self._name):
-                os.mkdir(self._name)
-
     def get_communication(self, conn, addr):
         ip = addr[0]
         port = str(addr[1])
@@ -54,11 +39,12 @@ class LightPowertoolServer(object):
             data = conn.recv(1024).decode(encoding='UTF-8').strip()
             data = data.split("-")
             if data and data[0]:
+                if data[0] == "BEGINNING!":
+                    last_time = str(self._data[-1][0])
+                    print("BEGIN EXPERIMENTS AT %s " % last_time)
+                    with open("installation_time.txt", "a") as f:
+                        f.write("INSTALLATION: %s\n" % last_time)
                 if data[0] == "FINISHED":
-                    csv_file = CSVExport(self.name_test(self._num))
-                    csv_file.export_data(self._data)
-                    self._num += 1
-                    self._data.clear()
                     break
                 elif data[0] == "NEW":
                     self._tosave = data[1]
@@ -81,11 +67,6 @@ class LightPowertoolServer(object):
     def shutdown(self):
         print('Socket is closing...')
         self._socket.close()
-        csv_file = CSVExport(self.name_test(self._num))
-        csv_file.export_data(self._data)
-
-        #json_file = JSONExport(self._tosave)
-        #json_file.export(self._data)
 
 def main():
     r"""
@@ -109,7 +90,7 @@ def main():
 
     server = LightPowertoolServer(args.host, args.port, args.name)
     # Create the "tests" directory to save the measures
-    server.test_dir("tests")
+    # server.test_dir("tests")
     start_new_thread(server.run, ())
     # For example, close the socket after 60 running seconds
     sleep(args.sleep)

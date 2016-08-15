@@ -43,13 +43,13 @@ def main():
     sleep(args.time)
     yocto_device.stopMeasure()
 
-    if args.output:
-        if args.csv:
-            CSVExport(args.output)\
-            .export_data((value for value in yocto_device._values))
-        elif args.json:
-            JSONExport(args.output)\
-            .export((value for value in yocto_device._values))
+    # if args.output:
+    #     if args.csv:
+    #         CSVExport(args.output)\
+    #         .export_data((value for value in yocto_device._values))
+    #     elif args.json:
+    #         JSONExport(args.output)\
+    #         .export((value for value in yocto_device._values))
 
     if args.statistics:
         measures = [y for x, y in yocto_device._values]

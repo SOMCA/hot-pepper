@@ -4,11 +4,13 @@ import subprocess
 import sys
 import threading
 import time
+import json
 
 from subprocess import call
 from datetime import datetime
-from yoctoammeter import YoctoDevice
-from cstatistics import CStatistics
+from lightpowertool_suite.classes.yoctoammeter import YoctoDevice
+from lightpowertool_suite.classes.cstatistics import CStatistics
+from lightpowertool_suite.classes.export_data.csv_export import CSVExport
 
 gc_app = "PAPRIKA_gccall.apk"
 
@@ -89,20 +91,25 @@ def main():
 		print("/!\ [WARNING] /!\ \n===> The scenario must have the '@' sign!")
 		sys.exit(1)
 
+	# Disable charging using USB
+	os.system("adb root")
+	time.sleep(1)
+	os.system("adb shell \"echo 0 > /sys/class/power_supply/usb/device/charge\"")
+	# Wait 5 seconds to perform the action
+	time.sleep(5)
+
 	execution_time_output = "%s/%s" % (args.output, "execution_time.txt")
 
-	print("EXECUTION TIME OUTPUT %s" % execution_time_output)
-
-	os.command("touch %s" % execution_time_output)
-	os.command("echo > %s" % execution_time_output)
+	os.system("touch %s" % execution_time_output)
+	os.system("echo > %s" % execution_time_output)
 
 	for x in range(args.begin, args.begin + args.nbr):
 		"""
 			Test nbr times the app and the energy consumption
 		"""
 
-		# Force the device to clear logs
-		subprocess.Popen(["adb", "logcat", "-c"], shell=False)
+		# Force the device to clear data
+		subprocess.Popen(["adb", "shell", "rm", "-rf", "/data/data/com.example.antonin.jouet*"], shell=False)
 
 		# Output name to store data
 		current_output = get_new_output(args.output, args.app, args.refactored, x)
@@ -115,7 +122,11 @@ def main():
 			force_stop_app(gc_app)
 
 		# Wait 10 seconds to avoid biases caused with the garbage collector application launch
-		time.sleep(10)
+		time.sleep(15)
+		measure_time_start = time.time()
+		print("OUTPUT: %s" % current_output)
+
+		subprocess.Popen(["adb", "logcat", "-c"], shell=False)
 
 		yocto_device = None
 
@@ -142,11 +153,18 @@ def main():
 		# ... and stop the yocto device!
 		yocto_device.stopMeasure()
 
-		print(CStatistics([y for x, y in yocto_device._values]))
+		CSVExport(current_output).export_data((value for value in yocto_device._values))
 
-		os.command("adb logcat | grep EXEC >> %s" % execution_time_output)
+		print(CStatistics([y for x, y in yocto_device._values]))
+		print("Scenarios Time : %s" % (time.time() - measure_time_start))
+
+		os.system("adb logcat -d | grep EXEC >> %s" % execution_time_output)
 
 	print("DONE")
+
+	os.system("adb shell \"echo 1 > /sys/class/power_supply/usb/device/charge\"")
+	# Wait 5 seconds to perform the action
+	time.sleep(5)
 
 	clear_cache_file(app)
 
