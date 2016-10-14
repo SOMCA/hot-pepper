@@ -40,6 +40,7 @@ class YoctoDevice(object):
     def addMeasure(self, fct, measure):
         current_time = (time() - self._init_time)
         data_to_store = ("{:2.3f}".format(current_time), measure.get_averageValue())
+        print("Time {0} --- Value {1}".format(current_time, measure.get_averageValue()))
         if self._network:
             self._socket.sendall(bytes("-".join([str(value) for value in data_to_store]), "UTF-8"))
         self._values.append(data_to_store)
@@ -65,6 +66,9 @@ class YoctoDevice(object):
         errmsg = YRefParam()
         if YAPI.RegisterHub("usb", errmsg) != YAPI.SUCCESS:
             raise Exception("Could not register the yocto device with USB connection.")
+
+        #if YAPI.RegisterHub("http://127.0.0.1:4444", errmsg) != YAPI.SUCCESS:
+            #raise Exception("Could not register the yocto device with USB connection.")
 
         ammeter = YCurrent.FirstCurrent()
         # find the ammeter

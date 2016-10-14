@@ -1,6 +1,6 @@
 import json
 
-from classes.export_data.export_pattern import PATTERNExport
+from .export_pattern import PATTERNExport import PATTERNExport
 
 class JSONExport(PATTERNExport):
     """docstring for JSONExport"""

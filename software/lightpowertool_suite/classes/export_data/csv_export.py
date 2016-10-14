@@ -1,6 +1,6 @@
 import csv
 
-from classes.export_data.export_pattern import PATTERNExport
+from .export_pattern import PATTERNExport
 
 class CSVExport(PATTERNExport):
     """docstring for CSVExport"""
