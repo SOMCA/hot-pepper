@@ -13,6 +13,7 @@ from lightpowertool_suite.classes.cstatistics import CStatistics
 from lightpowertool_suite.classes.export_data.csv_export import CSVExport
 
 gc_app = "PAPRIKA_gccall.apk"
+adb_path = os.environ['ANDROID_HOME']
 
 def parse_arguments():
 	parser = argparse.ArgumentParser(description='Get stats from Powertool output')
@@ -24,6 +25,7 @@ def parse_arguments():
 	parser.add_argument('-o', '--output', type=str, default=None, required=True, help="Specify output path")
 	parser.add_argument('-r', '--refactored', type=str, default=None, help="Specify if the application is refactored")
 	parser.add_argument('-s', '--scenario', type=str, default=None, help="Specify the scenario to run")
+	parser.add_argument('--bu', action="store_true", help="Launch the calabash scenario using the bundle gem manager, sometimes this option is required")
 	return parser.parse_args()
 
 def threaded_test(stop_event, nb, app, feature=None, scenario=None):
@@ -44,19 +46,23 @@ def threaded_test(stop_event, nb, app, feature=None, scenario=None):
 	f.write("\n")
 	f.flush()
 	if not feature and not scenario:
-		p = subprocess.Popen(["calabash-android", "run", app], shell=False,stdout=f)
+		# p = subprocess.Popen(["calabash-android", "run", app], shell=False,stdout=f)
+		p = subprocess.Popen(["bundle","exec","calabash-android", "run", app], shell=False,stdout=f)
 		f.write("COMMAND : calabash-android run " + app + "\n")
 		f.flush()
 	elif not feature and scenario:
-		p = subprocess.Popen(["calabash-android", "run", app, "--tags", scenario], shell=False,stdout=f)
+		# p = subprocess.Popen(["calabash-android", "run", app, "--tags", scenario], shell=False,stdout=f)
+		p = subprocess.Popen(["bundle","exec","calabash-android", "run", app, "--tags", scenario], shell=False,stdout=f)
 		f.write("COMMAND : calabash-android run " + app + " --tags " + scenario + "\n")
 		f.flush()
 	elif feature and not scenario:
-		p = subprocess.Popen(["calabash-android", "run", app, feature], shell=False,stdout=f)
+		# p = subprocess.Popen(["calabash-android", "run", app, feature], shell=False,stdout=f)
+		p = subprocess.Popen(["bundle","exec","calabash-android", "run", app, feature], shell=False,stdout=f)
 		f.write("COMMAND : calabash-android run " + app + " " + feature + "\n")
 		f.flush()
 	elif feature and scenario:
-		p = subprocess.Popen(["calabash-android", "run", app, feature, "--tags", scenario], shell=False,stdout=f)
+		# p = subprocess.Popen(["calabash-android", "run", app, feature, "--tags", scenario], shell=False,stdout=f)
+		p = subprocess.Popen(["bundle","exec","calabash-android", "run", app, feature, "--tags", scenario], shell=False,stdout=f)
 		f.write("COMMAND : calabash-android run " + app + " " + feature + " --tags " + scenario + "\n")
 		f.flush()
 	p.wait()
@@ -67,16 +73,16 @@ def threaded_test(stop_event, nb, app, feature=None, scenario=None):
 
 def launch_gc_app():
 	# The application "PAPRIKA_gccall.apk" must be installed on the Android smartphone!
-	gc_call = subprocess.Popen(["adb","shell","am","start","-n","paprika.io.gccall/.MainActivity"], shell=False)
+	gc_call = subprocess.Popen([adb_path+"/platform-tools/adb","shell","am","start","-n","paprika.io.gccall/.MainActivity"], shell=False)
 	gc_call.wait()
 
 def clear_cache_file(app):
 	# Clear cache files at the ending
-	call(["adb","shell","pm","clear",app])
+	call([adb_path+"/platform-tools/adb","shell","pm","clear",app])
 
 def force_stop_app(app):
 	# Force the application which launch the garbage collector to stop
-	p = subprocess.Popen(["adb","shell","am","force-stop", app], shell=False)
+	p = subprocess.Popen([adb_path+"/platform-tools/adb","shell","am","force-stop", app], shell=False)
 	p.wait()
 
 def get_new_output(output, app, refactored, instance):
@@ -92,9 +98,9 @@ def main():
 		sys.exit(1)
 
 	# Disable charging using USB
-	os.system("adb root")
+	os.system("$ANDROID_HOME/platform-tools/adb root")
 	time.sleep(1)
-	os.system("adb shell \"echo 0 > /sys/class/power_supply/usb/device/charge\"")
+	os.system("$ANDROID_HOME/platform-tools/adb shell \"echo 0 > /sys/class/power_supply/usb/device/charge\"")
 	# Wait 5 seconds to perform the action
 	time.sleep(5)
 
@@ -109,7 +115,7 @@ def main():
 		"""
 
 		# Force the device to clear data
-		subprocess.Popen(["adb", "shell", "rm", "-rf", "/data/data/com.example.antonin.jouet*"], shell=False)
+		subprocess.Popen([adb_path+"/platform-tools/adb", "shell", "rm", "-rf", "/data/data/com.example.antonin.jouet*"], shell=False)
 
 		# Output name to store data
 		current_output = get_new_output(args.output, args.app, args.refactored, x)
@@ -126,7 +132,7 @@ def main():
 		measure_time_start = time.time()
 		print("OUTPUT: %s" % current_output)
 
-		subprocess.Popen(["adb", "logcat", "-c"], shell=False)
+		subprocess.Popen([adb_path+"/platform-tools/adb", "logcat", "-c"], shell=False)
 
 		yocto_device = None
 
@@ -158,11 +164,11 @@ def main():
 		print(CStatistics([y for x, y in yocto_device._values]))
 		print("Scenarios Time : %s" % (time.time() - measure_time_start))
 
-		os.system("adb logcat -d | grep EXEC >> %s" % execution_time_output)
+		os.system("$ANDROID_HOME/platform-tools/adb logcat -d | grep EXEC >> %s" % execution_time_output)
 
 	print("DONE")
 
-	os.system("adb shell \"echo 1 > /sys/class/power_supply/usb/device/charge\"")
+	os.system("$ANDROID_HOME/platform-tools/adb shell \"echo 1 > /sys/class/power_supply/usb/device/charge\"")
 	# Wait 5 seconds to perform the action
 	time.sleep(5)
 
